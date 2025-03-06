@@ -2,13 +2,15 @@ version: "3.8"
 
 services:
   web:
-    build: .
+    container_name: web
+    build:
+      context: .
+      target: dev
     ports:
       - "3000:3000"
     volumes:
       - .:/app
-    depends_on:
-      - postgresdb
+      - /app/node_modules
 
   postgresdb:
     container_name: postgresdb

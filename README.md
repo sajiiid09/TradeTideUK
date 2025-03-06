@@ -20,6 +20,7 @@ The platform is built using Next.js App Router, Prisma, and PostgreSQL, with a t
 - **Authentication**: NextAuth.js with Google OAuth
 - **Security**: Argon2 for password hashing, Dompurify for XSS protection
 - **Form Handling**: React Hook Form with Zod validation
+- **Development**: Docker, Docker-Compose
 
 ## Dependencies
 
@@ -57,7 +58,13 @@ git clone https://github.com/eddie2111/TradeTideUK.git
 cd TradeTideUK
 ```
 
-### 2. Install Dependencies
+### 2.1 Run using scripted docker environment (Not required if require less setup and less core dev control)
+
+```sh
+./setup.sh
+```
+
+### 2.2 Install Dependencies (Not required if using docker, but allows more control)
 
 ```sh
 yarn install
@@ -114,3 +121,4 @@ MIT License
 ## Contributors
 
 - Tareq Mahmood (@[Eddie2111](https://github.com/Eddie2111/TradeTideUK))
+- Add yourself here if you contributed to the project!
