@@ -1,11 +1,8 @@
-generator client {
-  provider = "prisma-client-js"
-}
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
+// ! DO NOT EDIT 
+// This schema is created to adapt social auth
+// This schema is not meant to be used in the application
+// Only next-auth will be using this and however flagging this schema as immutable
+// If you want to modify this schema, please modify `schema.prisma -> UserProfile` instead
 
 model Account {
   id                String  @id @default(cuid())
@@ -34,33 +31,18 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid()) @unique
+  id            String       @id @unique @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?      @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
-  profiles      UserProfile?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now()) @updatedAt
-  @@unique([name, email])
-}
+  profiles      UserProfile[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now()) @updatedAt
 
-model UserProfile {
-  id           String   @id @default(cuid()) @unique
-  profileId    String
-  username     String
-  firstName    String  @db.VarChar(32)
-  lastName     String  @db.VarChar(32)
-  storeName    String  @db.VarChar(32)
-  storeAddress String  @db.VarChar(32)
-  image        String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now()) @updatedAt
-  userId       String   @unique
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  @@unique([profileId, username])
+  @@unique([name, email])
 }
 
 model VerificationToken {
@@ -70,3 +52,5 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+/////////////

@@ -1,0 +1,60 @@
+model Product {
+  id          String   @id @unique @default(cuid())
+  name        String   @db.VarChar(52)
+  description String   @db.Text
+  price       Int      @db.Integer
+  image       String[] @db.VarChar(64)
+  quantity    Int      @db.Integer
+  attributes  Json?    @db.Json
+  color       String[]
+  categories  String[]
+  status      ProductStatus
+  currency    String   @db.VarChar(6)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+}
+
+model Wishlist {
+  id        String      @id @unique @default(cuid())
+  userId    String
+  productId String[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @default(now()) @updatedAt
+  user      UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Cart {
+  id        String      @id @unique @default(cuid())
+  userId    String
+  productId String[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @default(now()) @updatedAt
+  user      UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Order {
+  id              String        @id @unique @default(cuid())
+  userId          String
+  products        String[]
+  shippingAddress Json          @db.Json
+  billingAddress  Json          @db.Json
+  shippingCharge  Int
+  orderStatus     OrderStatus
+  paymentMethod   PaymentMethod
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @default(now()) @updatedAt
+  user            UserProfile   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Checkout {
+  id              String        @id @unique @default(cuid())
+  userId          String
+  products        String[]
+  shippingAddress Json          @db.Json
+  billingAddress  Json          @db.Json
+  shippingCharge  Int
+  paymentMethod   PaymentMethod
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @default(now()) @updatedAt
+  user            UserProfile   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

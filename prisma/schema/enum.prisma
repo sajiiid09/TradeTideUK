@@ -1,0 +1,21 @@
+enum PaymentMethod {
+  CASH_ON_DELIVERY
+  PAYPAL
+  STRIPE
+}
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+enum ProductStatus {
+  AVAILABLE
+  OUT_OF_STOCK
+  DISCONTINUED
+}
+enum UserRole {
+  ADMIN
+  USER
+  BUYER
+  SELLER
+}
