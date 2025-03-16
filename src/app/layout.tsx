@@ -1,15 +1,17 @@
-import type { Metadata } from "next";
 import localFont from "next/font/local";
+import type { Metadata } from "next";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
-import Navbar from "@/components/common/navbar";
+import { ThemeProvider } from "@/components/theme-provider";
+import SiteHeader from "@/components/site-header";
+import SiteFooter from "@/components/site-footer";
 import { SessionProvider } from "next-auth/react";
 import NextHead from "@/components/common/metaData";
-import { 
-  APP_DESCRIPTION, 
-  APP_KEYWORDS, 
-  APP_NAME 
+import {
+  APP_DESCRIPTION,
+  APP_KEYWORDS,
+  APP_NAME,
 } from "@/constants/app.constant";
+import { Toaster } from "sonner";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -21,13 +23,12 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
-
 export const metadata: Metadata = NextHead({
   title: APP_NAME,
-  appName: 'ShoppersCorner',
+  appName: "ShoppersCorner",
   description: APP_DESCRIPTION,
   keywords: APP_KEYWORDS,
-})
+});
 
 export default function RootLayout({
   children,
@@ -36,15 +37,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <SessionProvider>
-          <Navbar />
-          {children}
+      <SessionProvider>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+            <div className="relative flex min-h-screen flex-col">
+              <SiteHeader />
+              <div className="flex-1">{children}</div>
+              <SiteFooter />
+            </div>
+          </ThemeProvider>
           <Toaster />
-        </SessionProvider>
-      </body>
+        </body>
+      </SessionProvider>
     </html>
   );
 }

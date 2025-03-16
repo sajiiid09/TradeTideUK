@@ -29,7 +29,7 @@ const NextHead = ({
   url,
   locale,
   twitterAccount,
-  twitterHandle
+  twitterHandle,
 }: TMetaDataProps): Metadata => {
   return {
     title: title ?? "Bookolia - Showcase Your Book Portfolios",
@@ -51,7 +51,7 @@ const NextHead = ({
     openGraph: {
       title: title ?? "Bookolia - Showcase Your Book Portfolios",
       description:
-        description ?? 
+        description ??
         "Bookolia is a platform where users can create and share their book portfolios. Join using Google and explore a wide range of book collections curated by the community.",
       url: url ?? "https://bookolia.vercel.app",
       siteName: appName ?? "Bookolia",
@@ -62,7 +62,7 @@ const NextHead = ({
       card: "summary_large_image",
       title: title ?? "Bookolia - Showcase Your Book Portfolios",
       description:
-        description ?? 
+        description ??
         "Bookolia is a platform where users can create and share their book portfolios. Join using Google and explore a wide range of book collections curated by the community.",
       site: twitterAccount ?? "@bookolia",
       creator: twitterHandle ?? "@yourtwitterhandle",
