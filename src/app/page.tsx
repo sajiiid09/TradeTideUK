@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import FeaturedProducts from "@/components/featured-products";
-import HeroSection from "@/components/hero-section";
-import CategorySection from "@/components/category-section";
-import Newsletter from "@/components/newsletter";
+import FeaturedProducts from "@/components/modules/home/featured-products";
+import HeroSection from "@/components/modules/home/hero-section";
+import CategorySection from "@/components/modules/home/category-section";
+import Newsletter from "@/components/modules/home/newsletter";
 
 export default function Home() {
   return (

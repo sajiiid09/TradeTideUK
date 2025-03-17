@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import ProductList from "@/components/product-list";
-import ProductFilters from "@/components/product-filters";
+import ProductList from "@/components/modules/product/product-list";
+import ProductFilters from "@/components/modules/product/product-filters";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProductsPage() {

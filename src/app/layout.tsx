@@ -1,9 +1,9 @@
 import localFont from "next/font/local";
 import type { Metadata } from "next";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import SiteHeader from "@/components/site-header";
-import SiteFooter from "@/components/site-footer";
+import { ThemeProvider } from "@/components/common/theme-provider";
+import SiteHeader from "@/components/common/site-header";
+import SiteFooter from "@/components/common/site-footer";
 import { SessionProvider } from "next-auth/react";
 import NextHead from "@/components/common/metaData";
 import {

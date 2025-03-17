@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-
+import PlaceholderSvg from "@/assets/placeholder.svg";
 export default function HeroSection() {
   return (
     <div className="relative bg-muted overflow-hidden">
@@ -8,7 +8,7 @@ export default function HeroSection() {
         <div
           className="absolute inset-0 bg-gradient-to-r from-background/90 to-background/50"
           style={{
-            backgroundImage: `url('https://picsum.photos/800/1600`,
+            backgroundImage: PlaceholderSvg,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}

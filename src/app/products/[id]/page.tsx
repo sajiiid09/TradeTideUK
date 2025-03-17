@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Minus, Plus, ShoppingCart, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import RelatedProducts from "@/components/related-products";
+import RelatedProducts from "@/components/modules/product/related-products";
 
 // Mock product data
 const product = {

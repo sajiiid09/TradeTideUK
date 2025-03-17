@@ -76,7 +76,7 @@ export default function ConfirmationPage() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button asChild>
-            <Link href="/">Continue Shopping</Link>
+            <Link href="/products">Continue Shopping</Link>
           </Button>
           <Button variant="outline" asChild>
             <Link href="/account/orders">View My Orders</Link>

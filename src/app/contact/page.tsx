@@ -1,52 +1,10 @@
-"use client";
+import { MapPin, Phone, Mail } from "lucide-react";
 
-import type React from "react";
-
-import { useState } from "react";
-import { MapPin, Phone, Mail, Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
+import LocationFrame from "./locationIframe";
+import ContactForm from "./contactForm";
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    // Simulate API call
-    setTimeout(() => {
-      toast("Message sent!", {
-        className: "my-classname",
-        description: "We'll get back to you as soon as possible.",
-        duration: 5000,
-        icon: <Check />,
-      });
-      setFormData({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
-      });
-      setIsSubmitting(false);
-    }, 1500);
-  };
-
+  // # replace the static informations with sanity cms
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="max-w-3xl mx-auto text-center mb-12">
@@ -57,66 +15,7 @@ export default function ContactPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
-        <div>
-          <h2 className="text-2xl font-bold mb-6">Get In Touch</h2>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label htmlFor="name" className="text-sm font-medium">
-                  Your Name
-                </label>
-                <Input
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-medium">
-                  Your Email
-                </label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="subject" className="text-sm font-medium">
-                Subject
-              </label>
-              <Input
-                id="subject"
-                name="subject"
-                value={formData.subject}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="message" className="text-sm font-medium">
-                Message
-              </label>
-              <Textarea
-                id="message"
-                name="message"
-                rows={5}
-                value={formData.message}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Sending..." : "Send Message"}
-            </Button>
-          </form>
-        </div>
+        <ContactForm />
 
         <div>
           <h2 className="text-2xl font-bold mb-6">Contact Information</h2>
@@ -169,14 +68,7 @@ export default function ContactPage() {
           </div>
         </div>
       </div>
-
-      <div className="rounded-lg overflow-hidden h-[400px] relative">
-        <div className="absolute inset-0 bg-muted flex items-center justify-center">
-          <p className="text-muted-foreground">
-            Map of our location in Dhaka, Bangladesh
-          </p>
-        </div>
-      </div>
+      <LocationFrame />
     </div>
   );
 }

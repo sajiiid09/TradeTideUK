@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -11,11 +12,39 @@ import {
   Check,
   CircleAlert,
 } from "lucide-react";
-import ShippingForm from "@/components/modules/checkout/shipping-form";
-import PaymentForm from "@/components/modules/checkout/payment-form";
-import ReviewOrder from "@/components/modules/checkout/review-order";
-import OrderSummary from "@/components/modules/checkout/order-summary";
+
 import { toast } from "sonner";
+import { LoadingSpinner } from "@/components/common/loadingSpinner";
+
+// fallback is loading spinner
+const ShippingForm = Dynamic(
+  () => import("@/components/modules/checkout/shipping-form"),
+  {
+    ssr: false,
+    loading: () => <LoadingSpinner />,
+  },
+);
+const PaymentForm = Dynamic(
+  () => import("@/components/modules/checkout/payment-form"),
+  {
+    ssr: false,
+    loading: () => <LoadingSpinner />,
+  },
+);
+const ReviewOrder = Dynamic(
+  () => import("@/components/modules/checkout/review-order"),
+  {
+    ssr: false,
+    loading: () => <LoadingSpinner />,
+  },
+);
+const OrderSummary = Dynamic(
+  () => import("@/components/modules/checkout/order-summary"),
+  {
+    ssr: false,
+    loading: () => <LoadingSpinner />,
+  },
+);
 
 // Mock cart data
 const cartItems = [
