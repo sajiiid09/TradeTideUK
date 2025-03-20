@@ -9,7 +9,6 @@ import NextHead from "@/components/common/metaData";
 import {
   APP_DESCRIPTION,
   APP_KEYWORDS,
-  APP_NAME,
 } from "@/constants/app.constant";
 import { Toaster } from "sonner";
 
@@ -24,8 +23,6 @@ const geistMono = localFont({
   weight: "100 900",
 });
 export const metadata: Metadata = NextHead({
-  title: APP_NAME,
-  appName: "ShoppersCorner",
   description: APP_DESCRIPTION,
   keywords: APP_KEYWORDS,
 });

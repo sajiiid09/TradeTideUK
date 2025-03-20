@@ -16,7 +16,6 @@ import {
 import { toast } from "sonner";
 import { LoadingSpinner } from "@/components/common/loadingSpinner";
 
-// fallback is loading spinner
 const ShippingForm = Dynamic(
   () => import("@/components/modules/checkout/shipping-form"),
   {

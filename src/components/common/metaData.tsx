@@ -1,3 +1,9 @@
+import {
+  APP_DESCRIPTION,
+  APP_KEYWORDS,
+  APP_NAME,
+  APP_TWITTER_HANDLE,
+} from "@/constants/app.constant";
 import type { Metadata } from "next";
 
 type TAuthorHref = {
@@ -5,10 +11,10 @@ type TAuthorHref = {
   url: string;
 };
 type TMetaDataProps = {
-  title: string;
-  appName: string;
-  description: string;
-  keywords: string[];
+  title?: string;
+  appName?: string;
+  description?: string;
+  keywords?: string[];
   authors?: TAuthorHref[];
   creator?: string;
   url?: string;
@@ -32,39 +38,26 @@ const NextHead = ({
   twitterHandle,
 }: TMetaDataProps): Metadata => {
   return {
-    title: title ?? "Bookolia - Showcase Your Book Portfolios",
-    description:
-      description ??
-      "Bookolia is a platform where users can create and share their book portfolios. Join using Google and explore a wide range of book collections curated by the community.",
-    keywords: keywords ?? [
-      "bookolia",
-      "book portfolio",
-      "book sharing platform",
-      "google sign-in",
-      "book collection",
-      "online book portfolios",
-    ],
+    title: title ? `${title} | ${APP_NAME}` : APP_NAME,
+    description: description ?? APP_DESCRIPTION,
+    keywords: keywords ?? APP_KEYWORDS,
     authors: authors ?? [
       { name: "Tareq Mahmood", url: "https://test.vercel.app" },
     ],
     creator: creator ?? "Your Name",
     openGraph: {
-      title: title ?? "Bookolia - Showcase Your Book Portfolios",
-      description:
-        description ??
-        "Bookolia is a platform where users can create and share their book portfolios. Join using Google and explore a wide range of book collections curated by the community.",
+      title: title ?? APP_NAME,
+      description: description ?? APP_DESCRIPTION,
       url: url ?? "https://bookolia.vercel.app",
-      siteName: appName ?? "Bookolia",
+      siteName: appName ?? APP_NAME,
       locale: locale ?? "en_US",
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: title ?? "Bookolia - Showcase Your Book Portfolios",
-      description:
-        description ??
-        "Bookolia is a platform where users can create and share their book portfolios. Join using Google and explore a wide range of book collections curated by the community.",
-      site: twitterAccount ?? "@bookolia",
+      title: title ?? APP_DESCRIPTION,
+      description: description ?? APP_DESCRIPTION,
+      site: twitterAccount ?? APP_TWITTER_HANDLE,
       creator: twitterHandle ?? "@yourtwitterhandle",
     },
     robots: "index, follow",

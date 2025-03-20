@@ -9,6 +9,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
+import { SearchModal } from "./searchModal";
 
 export default function SiteHeader() {
   const pathname = usePathname();
@@ -104,11 +105,15 @@ export default function SiteHeader() {
         <div className="flex items-center space-x-4 ml-auto">
           <div className="hidden md:flex relative">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <SearchModal>
             <Input
               type="search"
               placeholder="Search products..."
-              className="w-[200px] lg:w-[300px] pl-8"
+              value=""
+              onChange={() => {}}
+              className="w-[200px] lg:w-[300px] pl-8 text-transparent"
             />
+            </SearchModal>
           </div>
           <Button variant="ghost" size="icon" className="relative" asChild>
             <Link href="/cart">
