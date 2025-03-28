@@ -9,7 +9,6 @@ model Product {
   color       String[]
   categories  String[]
   status      ProductStatus
-  currency    String   @db.VarChar(6)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
 }

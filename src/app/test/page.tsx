@@ -24,7 +24,7 @@ export default function Test() {
   };
 
   const onClick = async()=>{
-    const response = await axios.get("/api/image?id=gtK2UT59aWzU0XJZZTb1U4");
+    const response = await axios.get("/api/image?id=5h8dt9gX1aLb59C03tK2Xn");
     setImage(response.data.imageUrl);
     console.log(response);
   }

@@ -1,54 +1,50 @@
-import Image from "next/image";
 import { Minus, Plus, ShoppingCart, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RelatedProducts from "@/components/modules/product/related-products";
+import { getProductById } from "@/lib/repositories/product.repository";
+import { LoadingSpinnerLayout } from "@/components/common/loadingSpinner";
+import SanityImage from "@/components/common/sanity-image.client";
 
-// Mock product data
-const product = {
-  id: 1,
-  name: "Jamdani Saree",
-  price: 12500,
-  description:
-    "Handwoven Jamdani saree with intricate traditional motifs. Made from the finest cotton by skilled artisans in Dhaka, Bangladesh. Each piece is unique and represents centuries of heritage and craftsmanship.",
-  images: [
-    "https://picsum.photos/200/300",
-    "https://picsum.photos/200/300",
-    "https://picsum.photos/200/300",
-  ],
-  colors: ["Red", "Blue", "Green"],
-  details:
-    "Jamdani is a fine muslin textile produced for centuries in South Asia, particularly in Bangladesh. It is one of the most time and labor-intensive forms of handloom weaving, and the finished product is known for its elaborate designs and durability.",
-  care: "Dry clean only. Handle with care. Store folded in a cool, dry place.",
-  materials: "100% Cotton",
-  dimensions: "5.5 meters x 1.25 meters",
-};
+export default async function ProductPage({ params }: { params: { id: string } }) {
+  // Fetch product data
+  const productData = await getProductById(params.id);
 
-export default function ProductPage({ params }: { params: { id: string } }) {
-  console.log(params.id);
+  // Handle loading state (optional, only for dynamic rendering)
+  if (!params.id) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <h1 className="text-2xl font-bold">Invalid product ID</h1>
+      </div>
+    );
+  }
+
+  // Handle case where product data is still being fetched
+  if (!productData) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <LoadingSpinnerLayout />
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Product Images */}
         <div className="space-y-4">
           <div className="relative aspect-square overflow-hidden rounded-lg">
-            <Image
-              src={product.images[0] || "https://picsum.photos/200/300"}
-              alt={product.name}
-              fill
-              className="object-cover"
-              priority
-            />
+          <SanityImage alt={productData.name} image={productData.image[0]} className="object-cover"/>
           </div>
           <div className="grid grid-cols-3 gap-2">
-            {product.images.map((image, index) => (
+            {productData?.image.map((image, index) => (
               <div
                 key={index}
                 className="relative aspect-square overflow-hidden rounded-lg border cursor-pointer"
               >
-                <Image
-                  src={image || "https://picsum.photos/200/300"}
-                  alt={`${product.name} ${index + 1}`}
-                  fill
+                <SanityImage
+                  alt={productData.name} 
+                  image={productData.image[0]}
                   className="object-cover"
                 />
               </div>
@@ -56,27 +52,28 @@ export default function ProductPage({ params }: { params: { id: string } }) {
           </div>
         </div>
 
+        {/* Product Details */}
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold">{product.name}</h1>
+            <h1 className="text-3xl font-bold">{productData?.name}</h1>
             <p className="text-2xl font-semibold mt-2">
-              ৳{product.price.toLocaleString()}
+              ৳{productData?.price.toLocaleString()}
             </p>
           </div>
 
-          <p className="text-muted-foreground">{product.description}</p>
+          <p className="text-muted-foreground">{productData?.description}</p>
 
           <div className="space-y-4">
             <div>
               <h3 className="font-medium mb-2">Color</h3>
               <div className="flex space-x-2">
-                {product.colors.map(color => (
+                {productData?.color.map(colors => (
                   <Button
-                    key={color}
+                    key={colors}
                     variant="outline"
                     className="rounded-full px-4"
                   >
-                    {color}
+                    {colors}
                   </Button>
                 ))}
               </div>
@@ -114,21 +111,21 @@ export default function ProductPage({ params }: { params: { id: string } }) {
               <TabsTrigger value="shipping">Shipping</TabsTrigger>
             </TabsList>
             <TabsContent value="details" className="space-y-4 pt-4">
-              <p>{product.details}</p>
-              <div className="grid grid-cols-2 gap-4">
+              <p>{productData?.description}</p>
+              {/* <div className="grid grid-cols-2 gap-4">
                 <div>
                   <h4 className="font-medium">Materials</h4>
-                  <p className="text-muted-foreground">{product.materials}</p>
+                  <p className="text-muted-foreground">{productData.materials}</p>
                 </div>
                 <div>
                   <h4 className="font-medium">Dimensions</h4>
-                  <p className="text-muted-foreground">{product.dimensions}</p>
+                  <p className="text-muted-foreground">{productData.dimensions}</p>
                 </div>
-              </div>
+              </div> */}
             </TabsContent>
-            <TabsContent value="care" className="pt-4">
-              <p>{product.care}</p>
-            </TabsContent>
+            {/* <TabsContent value="care" className="pt-4">
+              <p>{productData.care}</p>
+            </TabsContent> */}
             <TabsContent value="shipping" className="pt-4">
               <p>Free shipping on all domestic orders over ৳5,000.</p>
               <p>International shipping available at checkout.</p>

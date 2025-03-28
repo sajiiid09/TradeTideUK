@@ -13,7 +13,6 @@ export async function createProduct(data: {
   color: string[];
   categories: string[];
   status: ProductStatus;
-  currency: string;
 }) {
   try {
     return await prisma.product.create({
@@ -34,12 +33,14 @@ export async function getProductById(id: string) {
     if (!id) {
       throw new Error("Product ID is required.");
     }
-    return await prisma.product.findUnique({
-      where: { id },
+    const data = await prisma.product.findUnique({
+      where: { id: id },
     });
+    return data;
   } catch (err) {
     console.error("Error fetching product by ID:", err);
-    throw err;
+    // throw err;
+    return null;
   }
 }
 
