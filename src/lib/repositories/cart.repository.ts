@@ -35,7 +35,9 @@ export async function addProductToCart(userId: string, productId: string) {
       where: { userId },
     });
 
-    const updatedProductIds = cart?.productId ? [...cart.productId, productId] : [productId];
+    const updatedProductIds = cart?.productId
+      ? [...cart.productId, productId]
+      : [productId];
 
     return await prisma.cart.upsert({
       where: { userId },
@@ -63,7 +65,7 @@ export async function removeProductFromCart(userId: string, productId: string) {
       throw new Error("Cart not found.");
     }
 
-    const updatedProductIds = cart.productId.filter((id) => id !== productId);
+    const updatedProductIds = cart.productId.filter(id => id !== productId);
 
     return await prisma.cart.update({
       where: { userId },

@@ -1,7 +1,14 @@
+import { Metadata } from "next";
+import NextHead from "@/components/common/metaData";
+
 import { MapPin, Phone, Mail } from "lucide-react";
 
 import LocationFrame from "./locationIframe";
 import ContactForm from "./contactForm";
+
+export const metadata: Metadata = NextHead({
+  title: "Contact us",
+});
 
 export default function ContactPage() {
   // # replace the static informations with sanity cms

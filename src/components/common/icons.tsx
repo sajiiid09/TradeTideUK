@@ -1,5 +1,5 @@
-const GoogleIcon = ()=> (
-    <svg className="h-5 w-5" viewBox="0 0 24 24">
+const GoogleIcon = () => (
+  <svg className="h-5 w-5" viewBox="0 0 24 24">
     <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
       <path
         fill="#4285F4"
@@ -19,6 +19,6 @@ const GoogleIcon = ()=> (
       />
     </g>
   </svg>
-  );
+);
 
-export {GoogleIcon};
+export { GoogleIcon };

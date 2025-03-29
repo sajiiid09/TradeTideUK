@@ -21,7 +21,7 @@ const LongText = ({
   return (
     <div
       dangerouslySetInnerHTML={{ __html: sanitizedText }}
-      className="text-gray-400"
+      className="text-black"
     ></div>
   );
 };

@@ -106,15 +106,24 @@ export default function SiteHeader() {
           <div className="hidden md:flex relative">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <SearchModal>
-            <Input
-              type="search"
-              placeholder="Search products..."
-              value=""
-              onChange={() => {}}
-              className="w-[200px] lg:w-[300px] pl-8 text-transparent"
-            />
+              <Input
+                type="search"
+                placeholder="Search products..."
+                value=""
+                onChange={() => {}}
+                className="w-[200px] lg:w-[300px] pl-8 text-transparent"
+              />
             </SearchModal>
           </div>
+
+          <div className="md:hidden relative">
+            <SearchModal>
+              <Button variant="ghost" size="icon" className="relative" asChild>
+                <Search className=" h-5 w-5 text-muted-foreground" />
+              </Button>
+            </SearchModal>
+          </div>
+
           <Button variant="ghost" size="icon" className="relative" asChild>
             <Link href="/cart">
               <ShoppingCart className="h-5 w-5" />

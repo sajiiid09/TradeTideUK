@@ -3,7 +3,7 @@ import React from "react";
 import axios from "axios";
 
 export default function Test() {
-    const [image,setImage] = React.useState<string>("");
+  const [image, setImage] = React.useState<string>("");
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -23,11 +23,11 @@ export default function Test() {
     }
   };
 
-  const onClick = async()=>{
+  const onClick = async () => {
     const response = await axios.get("/api/image?id=5h8dt9gX1aLb59C03tK2Xn");
     setImage(response.data.imageUrl);
     console.log(response);
-  }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
@@ -36,9 +36,7 @@ export default function Test() {
         <button type="submit">Submit</button>
       </form>
       <button onClick={onClick}>Get Image</button>
-      {
-        image && <img src={image} alt="Uploaded" height="640px" width="480px"/>
-      }
+      {image && <img src={image} alt="Uploaded" height="640px" width="480px" />}
     </div>
   );
 }

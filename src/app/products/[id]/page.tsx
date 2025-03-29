@@ -1,16 +1,23 @@
 import { Minus, Plus, ShoppingCart, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  LoadingSpinner,
+  LoadingSpinnerLayout,
+} from "@/components/common/loadingSpinner";
 import RelatedProducts from "@/components/modules/product/related-products";
 import { getProductById } from "@/lib/repositories/product.repository";
-import { LoadingSpinnerLayout } from "@/components/common/loadingSpinner";
 import SanityImage from "@/components/common/sanity-image.client";
+import LongText from "@/components/common/richText";
+import { Suspense } from "react";
 
-export default async function ProductPage({ params }: { params: { id: string } }) {
-  // Fetch product data
+export default async function ProductPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const productData = await getProductById(params.id);
 
-  // Handle loading state (optional, only for dynamic rendering)
   if (!params.id) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -19,7 +26,6 @@ export default async function ProductPage({ params }: { params: { id: string } }
     );
   }
 
-  // Handle case where product data is still being fetched
   if (!productData) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -31,10 +37,13 @@ export default async function ProductPage({ params }: { params: { id: string } }
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Product Images */}
         <div className="space-y-4">
           <div className="relative aspect-square overflow-hidden rounded-lg">
-          <SanityImage alt={productData.name} image={productData.image[0]} className="object-cover"/>
+            <SanityImage
+              alt={productData.name}
+              image={productData.image[0]}
+              className="object-cover"
+            />
           </div>
           <div className="grid grid-cols-3 gap-2">
             {productData?.image.map((image, index) => (
@@ -43,8 +52,8 @@ export default async function ProductPage({ params }: { params: { id: string } }
                 className="relative aspect-square overflow-hidden rounded-lg border cursor-pointer"
               >
                 <SanityImage
-                  alt={productData.name} 
-                  image={productData.image[0]}
+                  alt={productData.name}
+                  image={image}
                   className="object-cover"
                 />
               </div>
@@ -52,7 +61,6 @@ export default async function ProductPage({ params }: { params: { id: string } }
           </div>
         </div>
 
-        {/* Product Details */}
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-bold">{productData?.name}</h1>
@@ -111,7 +119,11 @@ export default async function ProductPage({ params }: { params: { id: string } }
               <TabsTrigger value="shipping">Shipping</TabsTrigger>
             </TabsList>
             <TabsContent value="details" className="space-y-4 pt-4">
-              <p>{productData?.description}</p>
+              <Suspense fallback={<LoadingSpinner size={5} />}>
+                <LongText
+                  longText={productData?.attributes?.toString() ?? ""}
+                />
+              </Suspense>
               {/* <div className="grid grid-cols-2 gap-4">
                 <div>
                   <h4 className="font-medium">Materials</h4>

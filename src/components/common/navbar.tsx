@@ -2,7 +2,6 @@
 
 // ### DEPRECATED -> This component may no longer required
 
-
 import Link from "next/link";
 import { BookOpen, User } from "lucide-react";
 import { Button } from "@/components/ui/button";

@@ -1,5 +1,5 @@
 "use server";
-import { Prisma, ProductStatus } from "@prisma/client";
+import { Prisma, Product, ProductStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
 // Create a new product
@@ -18,7 +18,9 @@ export async function createProduct(data: {
     return await prisma.product.create({
       data: {
         ...data,
-        attributes: data.attributes ? JSON.stringify(data.attributes) : undefined,
+        attributes: data.attributes
+          ? JSON.stringify(data.attributes)
+          : undefined,
       },
     });
   } catch (err) {
@@ -82,20 +84,19 @@ export async function getProducts({
 }
 
 // Update a product
-export async function updateProduct(id: string, data: Partial<Omit<typeof createProduct, "id">>) {
+export async function updateProduct(id: string, data: Partial<Product>) {
   try {
     if (!id) {
       throw new Error("Product ID is required.");
     }
     return await prisma.product.update({
       where: { id },
-      data: data
-      /*
-      {
+      data: {
         ...data,
-        attributes: data.attributes ? JSON.stringify(data.attributes) : undefined,
+        attributes: data.attributes
+          ? JSON.stringify(data.attributes)
+          : undefined,
       },
-      */
     });
   } catch (err) {
     console.error("Error updating product:", err);
@@ -114,6 +115,25 @@ export async function deleteProduct(id: string) {
     });
   } catch (err) {
     console.error("Error deleting product:", err);
+    throw err;
+  }
+}
+
+// search a product
+export async function searchProduct(query: string): Promise<Product[]> {
+  try {
+    if (!query) return [];
+    const data = await prisma.product.findMany({
+      where: {
+        OR: [
+          { name: { contains: query.toLowerCase() } },
+          { description: { contains: query.toLowerCase() } },
+        ],
+      },
+    });
+    return data;
+  } catch (err) {
+    console.error("Error searching product:", err);
     throw err;
   }
 }

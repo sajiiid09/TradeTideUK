@@ -28,26 +28,26 @@ const rateLimiter = (ip: string): { allowed: boolean; resetTime?: number } => {
   // Initialize the counter for a new IP
   requestCounts.set(ip, { count: 1, resetTime: now + TIME_WINDOW });
   return { allowed: true };
-}
+};
 
 export default async function RateLimiter_Middleware(request: Request) {
-      if (process.env.NODE_ENV === "production") {
-        // Extract the client's IP address
-        const ip = request.headers.get("x-forwarded-for") || "127.0.0.1";
-    
-        // Apply rate limiting
-        const { allowed, resetTime } = rateLimiter(ip);
-    
-        if (!allowed) {
-          return Response.json(
-            { error: "Too many requests. Please try again later." },
-            {
-              status: 429,
-              headers: {
-                "Retry-After": `${Math.ceil((resetTime! - Date.now()) / 1000)}`,
-              },
-            },
-          );
-        }
-      }
+  if (process.env.NODE_ENV === "production") {
+    // Extract the client's IP address
+    const ip = request.headers.get("x-forwarded-for") || "127.0.0.1";
+
+    // Apply rate limiting
+    const { allowed, resetTime } = rateLimiter(ip);
+
+    if (!allowed) {
+      return Response.json(
+        { error: "Too many requests. Please try again later." },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": `${Math.ceil((resetTime! - Date.now()) / 1000)}`,
+          },
+        },
+      );
+    }
+  }
 }

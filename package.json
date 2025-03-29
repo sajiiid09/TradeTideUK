@@ -12,7 +12,8 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio",
-    "post:install": "prisma generate"
+    "post:install": "prisma generate",
+    "dev:prepare": "next lint --fix && prettier --write . && next build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

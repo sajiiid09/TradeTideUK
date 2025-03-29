@@ -13,7 +13,7 @@ interface IOrderSummary {
 }
 
 export const OrderSummary = ({ subtotal, shipping, total }: IOrderSummary) => {
-    const currency = `৳`;
+  const currency = `৳`;
   return (
     <Card>
       <CardContent className="p-6">
@@ -21,7 +21,10 @@ export const OrderSummary = ({ subtotal, shipping, total }: IOrderSummary) => {
         <div className="space-y-3">
           <div className="flex justify-between">
             <span className="text-muted-foreground">Subtotal</span>
-            <span>{currency}{subtotal.toLocaleString()}</span>
+            <span>
+              {currency}
+              {subtotal.toLocaleString()}
+            </span>
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Shipping</span>
@@ -30,7 +33,10 @@ export const OrderSummary = ({ subtotal, shipping, total }: IOrderSummary) => {
           <Separator />
           <div className="flex justify-between font-semibold">
             <span>Total</span>
-            <span>{currency}{total.toLocaleString()}</span>
+            <span>
+              {currency}
+              {total.toLocaleString()}
+            </span>
           </div>
         </div>
 
