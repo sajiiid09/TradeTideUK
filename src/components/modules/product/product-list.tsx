@@ -6,6 +6,7 @@ type TProduct = {
   // catagories: string[];
   price: number;
   image: string[];
+  color: string[];
 };
 
 export default function ProductList({ products }: { products: TProduct[] }) {

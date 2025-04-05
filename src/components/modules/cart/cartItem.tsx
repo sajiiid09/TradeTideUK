@@ -1,22 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import SanityImage from "@/components/common/sanity-image.client";
 
 type TCartItem = {
-  id: number;
+  id: string;
   name: string;
   price: number;
   image: string;
   quantity: number;
-  color: string;
+  color: string[];
 };
 interface ICartItemProps {
   item: TCartItem;
-  updateQuantity: (id: number, quantity: number) => void;
-  removeItem: (id: number) => void;
+  updateQuantity: (id: string, quantity: number) => void;
+  removeItem: (id: string) => void;
 }
 
 export const CartItems = ({
@@ -27,11 +27,10 @@ export const CartItems = ({
   return (
     <div className="flex flex-col sm:flex-row gap-4 p-4 border rounded-lg">
       <div className="relative w-full sm:w-24 h-24 flex-shrink-0">
-        <Image
-          src={item.image || "https://picsum.photos/200/300"}
-          alt={item.name}
-          fill
+        <SanityImage
+          image={item.image}
           className="object-cover rounded-md"
+          alt={item.name}
         />
       </div>
       <div className="flex-1 space-y-2">

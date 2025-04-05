@@ -35,7 +35,7 @@ const CartEmpty = dynamic(
 export default function CartPage() {
   const {
     cartItems,
-    setCartItems,
+    clearCart,
     updateQuantity,
     removeItem,
     subtotal,
@@ -67,7 +67,7 @@ export default function CartPage() {
               <Button variant="outline" asChild>
                 <Link href="/products">Continue Shopping</Link>
               </Button>
-              <Button onClick={() => setCartItems([])}>Clear Cart</Button>
+              <Button onClick={() => clearCart()}>Clear Cart</Button>
             </div>
           </div>
 

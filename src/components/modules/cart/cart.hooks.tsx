@@ -1,55 +1,32 @@
 "use client";
-import { useState } from "react";
-
-// Mock cart data
-const initialCartItems = [
-  {
-    id: 1,
-    name: "Jamdani Saree",
-    price: 12500,
-    image: "https://picsum.photos/200/300",
-    quantity: 1,
-    color: "Blue",
-  },
-  {
-    id: 7,
-    name: "Jute Handbag",
-    price: 1500,
-    image: "https://picsum.photos/200/300",
-    quantity: 2,
-    color: "Natural",
-  },
-];
+import { useCartContext } from "./cart.context";
 
 export const useCart = () => {
-  const [cartItems, setCartItems] = useState(initialCartItems);
+  // Extract cart state and actions from Zustand context
+  const { items, addItem, removeItem, updateItem, clearCart } =
+    useCartContext();
 
-  const updateQuantity = (id: number, newQuantity: number) => {
-    if (newQuantity < 1) return;
-
-    setCartItems(
-      cartItems.map(item =>
-        item.id === id ? { ...item, quantity: newQuantity } : item,
-      ),
-    );
+  // Function to update the quantity of an item
+  const updateQuantity = (id: string, newQuantity: number) => {
+    if (newQuantity < 1) return; // Prevent setting quantity below 1
+    updateItem(id, newQuantity);
   };
 
-  const removeItem = (id: number) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
-  };
-
-  const subtotal = cartItems.reduce(
+  // Calculate subtotal, shipping, and total
+  const subtotal = items.reduce(
     (total, item) => total + item.price * item.quantity,
     0,
   );
   const shipping = subtotal > 5000 ? 0 : 150;
   const total = subtotal + shipping;
 
+  // Return all necessary values and functions
   return {
-    cartItems,
-    setCartItems,
-    updateQuantity,
+    cartItems: items, // Use items directly from Zustand context
+    addItem,
     removeItem,
+    updateQuantity,
+    clearCart,
     subtotal,
     shipping,
     total,

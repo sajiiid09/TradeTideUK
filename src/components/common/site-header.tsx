@@ -1,48 +1,26 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { ShoppingCart, Menu, Search, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SearchModal } from "./searchModal";
-
+import { useCartContext } from "../modules/cart/cart.context";
+import { useLocalStorage } from "@/lib/useLocalStorage";
+import { useRoutes } from "./routes";
 export default function SiteHeader() {
-  const pathname = usePathname();
+  const { items } = useCartContext();
+  const { routes } = useRoutes();
   const [cartCount, setCartCount] = useState(0);
-  console.log(typeof setCartCount);
-
-  const routes = [
-    {
-      href: "/",
-      label: "Home",
-      active: pathname === "/",
-    },
-    {
-      href: "/products",
-      label: "Products",
-      active: pathname === "/products",
-    },
-    {
-      href: "/categories",
-      label: "Categories",
-      active: pathname === "/categories",
-    },
-    {
-      href: "/about",
-      label: "About",
-      active: pathname === "/about",
-    },
-    {
-      href: "/contact",
-      label: "Contact",
-      active: pathname === "/contact",
-    },
-  ];
+  const { setLocalStorage } = useLocalStorage();
+  useEffect(() => {
+    setCartCount(items.length);
+    setLocalStorage("cart", JSON.stringify(items));
+  }, [items, items.length, setLocalStorage]);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">

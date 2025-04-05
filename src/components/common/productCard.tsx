@@ -6,16 +6,19 @@ import { ShoppingCart } from "lucide-react";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import { getSanityImage } from "@/lib/getSanityImage";
+import { toast } from "sonner";
+import { useCartContext } from "../modules/cart/cart.context";
 
 type TProduct = {
   id: string;
   name: string;
-  //catagories: string[];
   price: number;
   image: string[];
+  color: string[];
 };
 export default function ProductCard({ product }: { product: TProduct }) {
   const [mainImageUrl, setMainImageUrl] = useState<string>("");
+  const { addItem } = useCartContext();
   useEffect(() => {
     async function main() {
       try {
@@ -28,6 +31,25 @@ export default function ProductCard({ product }: { product: TProduct }) {
     }
     main();
   });
+  const addProductToCart = (
+    id: string,
+    name: string,
+    price: number,
+    image: string,
+    color: string[],
+  ) => {
+    const data = {
+      id,
+      name,
+      price,
+      image,
+      quantity: 1,
+      color,
+    };
+    addItem(data);
+    console.log(data);
+    toast.success(`Product added to cart`);
+  };
   return (
     <Card key={product.id} className="overflow-hidden">
       <Link href={`/products/${product.id}`}>
@@ -50,7 +72,19 @@ export default function ProductCard({ product }: { product: TProduct }) {
         <p className="mt-1 font-semibold">৳{product.price.toLocaleString()}</p>
       </CardContent>
       <CardFooter className="p-4 pt-0">
-        <Button className="w-full" size="sm">
+        <Button
+          className="w-full"
+          size="sm"
+          onClick={() =>
+            addProductToCart(
+              product.id,
+              product.name,
+              product.price,
+              product.image[0],
+              [product.color[0]],
+            )
+          }
+        >
           <ShoppingCart className="mr-2 h-4 w-4" />
           Add to Cart
         </Button>
