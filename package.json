@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
-    "prisma:migrate": "prisma migrate dev",
+    "prisma:migrate": "prisma --RESTRICTED 'DO NOT RUN MIGRATIONS FROM CLIENT SIDE'",
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio",
     "post:install": "prisma generate",

@@ -1,10 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { CURRENCY } from "@/constants/app.constant";
 
 interface IOrderSummary {
   subtotal: number;
@@ -13,7 +16,16 @@ interface IOrderSummary {
 }
 
 export const OrderSummary = ({ subtotal, shipping, total }: IOrderSummary) => {
-  const currency = `৳`;
+  const { data: session } = useSession();
+  const router = useRouter();
+  const redirectTo = (): void => {
+    if (session?.user) {
+      router.push("/checkout");
+    } else {
+      toast.warning("Please login to proceed");
+      router.push("/login");
+    }
+  };
   return (
     <Card>
       <CardContent className="p-6">
@@ -22,19 +34,19 @@ export const OrderSummary = ({ subtotal, shipping, total }: IOrderSummary) => {
           <div className="flex justify-between">
             <span className="text-muted-foreground">Subtotal</span>
             <span>
-              {currency}
+              {CURRENCY}
               {subtotal.toLocaleString()}
             </span>
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Shipping</span>
-            <span>{shipping === 0 ? "Free" : `${currency}${shipping}`}</span>
+            <span>{shipping === 0 ? "Free" : `${CURRENCY}${shipping}`}</span>
           </div>
           <Separator />
           <div className="flex justify-between font-semibold">
             <span>Total</span>
             <span>
-              {currency}
+              {CURRENCY}
               {total.toLocaleString()}
             </span>
           </div>
@@ -51,8 +63,8 @@ export const OrderSummary = ({ subtotal, shipping, total }: IOrderSummary) => {
         </div>
       </CardContent>
       <CardFooter className="p-6 pt-0">
-        <Button className="w-full" size="lg" asChild>
-          <Link href="/checkout">Proceed to Checkout</Link>
+        <Button className="w-full" size="lg" onClick={redirectTo}>
+          Proceed to Checkout
         </Button>
       </CardFooter>
     </Card>

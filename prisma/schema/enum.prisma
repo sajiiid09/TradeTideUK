@@ -13,9 +13,7 @@ enum ProductStatus {
   OUT_OF_STOCK
   DISCONTINUED
 }
-enum UserRole {
-  ADMIN
-  USER
-  BUYER
-  SELLER
+enum UserStatus {
+  ACTIVE
+  BLOCKED
 }

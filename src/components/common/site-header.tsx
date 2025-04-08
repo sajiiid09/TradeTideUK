@@ -1,26 +1,26 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingCart, Menu, Search, User } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import { SearchModal } from "./searchModal";
 import { useCartContext } from "../modules/cart/cart.context";
-import { useLocalStorage } from "@/lib/useLocalStorage";
 import { useRoutes } from "./routes";
+import { CartButton } from "./cart-button";
+import { AuthButton } from "./auth-button";
+
 export default function SiteHeader() {
   const { items } = useCartContext();
   const { routes } = useRoutes();
   const [cartCount, setCartCount] = useState(0);
-  const { setLocalStorage } = useLocalStorage();
+
   useEffect(() => {
     setCartCount(items.length);
-    setLocalStorage("cart", JSON.stringify(items));
-  }, [items, items.length, setLocalStorage]);
+  }, [items, items.length]);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
@@ -102,23 +102,8 @@ export default function SiteHeader() {
             </SearchModal>
           </div>
 
-          <Button variant="ghost" size="icon" className="relative" asChild>
-            <Link href="/cart">
-              <ShoppingCart className="h-5 w-5" />
-              {cartCount > 0 && (
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
-                  {cartCount}
-                </Badge>
-              )}
-              <span className="sr-only">Cart</span>
-            </Link>
-          </Button>
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/login">
-              <User className="h-5 w-5" />
-              <span className="sr-only">Account</span>
-            </Link>
-          </Button>
+          <CartButton cartCount={cartCount} />
+          <AuthButton />
         </div>
       </div>
     </header>

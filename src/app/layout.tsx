@@ -8,6 +8,7 @@ import { SessionProvider } from "next-auth/react";
 import NextHead from "@/components/common/metaData";
 import { APP_DESCRIPTION, APP_KEYWORDS } from "@/constants/app.constant";
 import { Toaster } from "sonner";
+import { CartInitializer } from "@/components/modules/cart/cart.hydration";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -35,6 +36,7 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
+          <CartInitializer />
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             <div className="relative flex min-h-screen flex-col">
               <SiteHeader />

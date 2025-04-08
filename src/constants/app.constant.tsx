@@ -19,3 +19,5 @@ export const APP_FEATURES = {
   // feature flags
   // e.g. 'feature-name': true,
 };
+
+export const CURRENCY = "£";

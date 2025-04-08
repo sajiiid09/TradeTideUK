@@ -1,13 +1,20 @@
 "use client";
+import { useEffect, useState } from "react";
+
 import Image from "next/image";
 import Link from "next/link";
-import { Card, CardContent, CardFooter } from "../ui/card";
-import { ShoppingCart } from "lucide-react";
+
 import { Button } from "../ui/button";
-import { useEffect, useState } from "react";
+import { Card, CardContent, CardFooter } from "../ui/card";
+
 import { getSanityImage } from "@/lib/getSanityImage";
-import { toast } from "sonner";
 import { useCartContext } from "../modules/cart/cart.context";
+
+import { ShoppingCart } from "lucide-react";
+
+import { toast } from "sonner";
+import { CURRENCY } from "@/constants/app.constant";
+import { useSession } from "next-auth/react";
 
 type TProduct = {
   id: string;
@@ -16,9 +23,11 @@ type TProduct = {
   image: string[];
   color: string[];
 };
+
 export default function ProductCard({ product }: { product: TProduct }) {
   const [mainImageUrl, setMainImageUrl] = useState<string>("");
-  const { addItem } = useCartContext();
+  const { data: session } = useSession();
+  const { addItem, addUser } = useCartContext();
   useEffect(() => {
     async function main() {
       try {
@@ -47,7 +56,7 @@ export default function ProductCard({ product }: { product: TProduct }) {
       color,
     };
     addItem(data);
-    console.log(data);
+    addUser(session?.user?.id ?? "");
     toast.success(`Product added to cart`);
   };
   return (
@@ -69,7 +78,10 @@ export default function ProductCard({ product }: { product: TProduct }) {
         <Link href={`/products/${product.id}`} className="hover:underline">
           <h3 className="font-medium">{product.name}</h3>
         </Link>
-        <p className="mt-1 font-semibold">৳{product.price.toLocaleString()}</p>
+        <p className="mt-1 font-semibold">
+          ${CURRENCY}
+          {product.price.toLocaleString()}
+        </p>
       </CardContent>
       <CardFooter className="p-4 pt-0">
         <Button

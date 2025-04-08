@@ -11,7 +11,6 @@ datasource db {
 
 model UserProfile {
   id           String  @id @default(cuid()) @unique
-  role         UserRole
   firstName    String  @db.VarChar(32)
   lastName     String  @db.VarChar(32)
   phoneNumber  String  @db.VarChar(32)
@@ -24,5 +23,6 @@ model UserProfile {
   wishlists    Wishlist[]
   carts        Cart[]
   checkouts    Checkout[]
+  status       UserStatus? @default(ACTIVE)
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

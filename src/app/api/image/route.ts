@@ -1,7 +1,7 @@
 import sharp from "sharp";
 import { generateUniqueFilename } from "@/lib/utils";
 import { client } from "@/sanity/lib/client";
-import RateLimiter_Middleware from "@/components/common/rate-limiter.middleware";
+import RateLimiter_Middleware from "@/lib/rate-limiter.middleware";
 
 async function fetchImageDetails(imageId: string) {
   const imageQuery = `*[_type == "images" && _id == $imageId]{
