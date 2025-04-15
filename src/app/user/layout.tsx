@@ -3,12 +3,30 @@ import Link from "next/link";
 import { User, Settings, ShoppingBag, Heart, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { auth } from "@/auth";
 
 interface UserLayoutProps {
   children: ReactNode;
 }
 
-export default function UserLayout({ children }: UserLayoutProps) {
+export default async function UserLayout({ children }: UserLayoutProps) {
+  const session = await auth();
+  if (!session) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-2xl font-bold mb-4">You are not logged in</h1>
+        <p className="mb-4">
+          Please <Link href="/auth/login">login</Link> to access your account.
+        </p>
+        <Button variant="ghost" asChild>
+          <Link href="/login" className="flex items-center">
+            <LogOut className="mr-2 h-4 w-4" />
+            Login
+          </Link>
+        </Button>
+      </div>
+    );
+  }
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">

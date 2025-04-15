@@ -119,6 +119,21 @@ export async function deleteProduct(id: string) {
   }
 }
 
+export async function getManyProducts(ids: string[]) {
+  try {
+    return await prisma.product.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+  } catch (err) {
+    console.error("Error fetching products:", err);
+    throw err;
+  }
+}
+
 // search a product
 export async function searchProduct(query: string): Promise<Product[]> {
   try {

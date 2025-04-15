@@ -2,17 +2,25 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { GoogleIcon } from "@/components/common/icons";
+import { useRouter } from "next/navigation";
+import { PRODUCTS_ROUTE } from "@/components/common/routes";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-
+  const { data: session } = useSession();
+  useEffect(() => {
+    if (session) {
+      router.push(PRODUCTS_ROUTE);
+    }
+  });
   const toggleLogin = () => {
     setIsLoading(true);
-    signIn("google", { redirectTo: "/" });
+    signIn("google");
   };
 
   return (

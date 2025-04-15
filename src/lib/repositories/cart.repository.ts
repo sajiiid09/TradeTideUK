@@ -79,7 +79,11 @@ export async function createCart(
 }
 
 // Add a product to the cart
-export async function addProductToCart(userId: string, productId: string, cartId: string) {
+export async function addProductToCart(
+  userId: string,
+  productId: string,
+  cartId: string,
+) {
   try {
     if (!userId || !productId) {
       throw new Error("User ID and Product ID are required.");
@@ -87,7 +91,7 @@ export async function addProductToCart(userId: string, productId: string, cartId
 
     const cart = await prisma.cart.findFirst({
       where: { userId },
-    })
+    });
 
     const updatedProductIds = cart?.productId
       ? [...cart.productId, productId]
@@ -98,7 +102,6 @@ export async function addProductToCart(userId: string, productId: string, cartId
       update: { productId: updatedProductIds },
       create: { userId, productId: updatedProductIds },
     });
-
   } catch (err) {
     console.error("Error adding product to cart:", err);
     throw err;
@@ -106,7 +109,11 @@ export async function addProductToCart(userId: string, productId: string, cartId
 }
 
 // Remove a product from the cart
-export async function removeProductFromCart(userId: string, productId: string, cartId: string) {
+export async function removeProductFromCart(
+  userId: string,
+  productId: string,
+  cartId: string,
+) {
   try {
     if (!userId || !productId || !cartId) {
       throw new Error("User ID, Product ID and cart ID are required.");

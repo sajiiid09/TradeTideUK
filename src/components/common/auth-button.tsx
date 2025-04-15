@@ -11,15 +11,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useCartContext } from "../modules/cart/cart.context";
 import { createCart } from "@/lib/repositories/cart.repository";
+import { useRouter } from "next/navigation";
 
 export function AuthButton() {
+  const route = useRouter();
   const { data: session } = useSession();
   const { items } = useCartContext();
   const toggleLogin = () => {
-    signIn("google", { redirectTo: "/" });
+    route.push("/login");
   };
 
   const toggleLogout = async () => {

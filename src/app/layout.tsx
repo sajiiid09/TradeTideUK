@@ -9,6 +9,7 @@ import NextHead from "@/components/common/metaData";
 import { APP_DESCRIPTION, APP_KEYWORDS } from "@/constants/app.constant";
 import { Toaster } from "sonner";
 import { CartInitializer } from "@/components/modules/cart/cart.hydration";
+import UserProfileProvider from "@/components/common/user-profile-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -39,6 +40,7 @@ export default function RootLayout({
           <CartInitializer />
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             <div className="relative flex min-h-screen flex-col">
+              <UserProfileProvider />
               <SiteHeader />
               <div className="flex-1">{children}</div>
               <SiteFooter />

@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { CURRENCY } from "@/constants/app.constant";
+import { useLocalStorage } from "@/lib/useLocalStorage";
 
 interface IOrderSummary {
   subtotal: number;
@@ -17,13 +18,17 @@ interface IOrderSummary {
 
 export const OrderSummary = ({ subtotal, shipping, total }: IOrderSummary) => {
   const { data: session } = useSession();
+  const { getLocalStorage } = useLocalStorage();
   const router = useRouter();
   const redirectTo = (): void => {
-    if (session?.user) {
+    if (getLocalStorage("profile") && session?.user?.id) {
       router.push("/checkout");
-    } else {
+    } else if (!session?.user) {
       toast.warning("Please login to proceed");
       router.push("/login");
+    } else {
+      toast.warning("Please create your profile to proceed");
+      router.push("/user/onboard");
     }
   };
   return (

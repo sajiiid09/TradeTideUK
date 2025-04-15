@@ -1,77 +1,36 @@
 "use client";
-
 import { useState, useEffect } from "react";
+
+import Dayjs from "dayjs";
 import Image from "next/image";
 import Link from "next/link";
+
 import { Edit, MapPin, Phone, Mail, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { useSession } from "next-auth/react";
+import { getOneUserWithProfile } from "@/lib/repositories/profile.repository";
 
-// Mock user data based on the Prisma schema
-const mockUserProfile = {
-  id: "clq1234567",
-  role: "CUSTOMER",
-  firstName: "Rahul",
-  lastName: "Ahmed",
-  phoneNumber: "+880 1712 345678",
-  address: "123 Green Road, Dhaka",
-  image: "/placeholder.svg?height=200&width=200",
-  createdAt: "2023-01-15T08:30:00Z",
-  updatedAt: "2023-06-20T14:45:00Z",
-  userId: "auth0|123456789",
-  orders: [
-    {
-      id: "ord123",
-      orderNumber: "BD12345",
-      status: "DELIVERED",
-      total: 14000,
-      createdAt: "2023-05-10T09:15:00Z",
-      items: [
-        { name: "Jamdani Saree", quantity: 1, price: 12500 },
-        { name: "Jute Handbag", quantity: 1, price: 1500 },
-      ],
-    },
-    {
-      id: "ord456",
-      orderNumber: "BD12346",
-      status: "PROCESSING",
-      total: 3500,
-      createdAt: "2023-06-18T11:30:00Z",
-      items: [{ name: "Nakshi Kantha", quantity: 1, price: 3500 }],
-    },
-  ],
-  wishlists: [
-    {
-      id: "wl1",
-      name: "Silk Panjabi",
-      price: 4500,
-      image: "/placeholder.svg?height=100&width=100",
-    },
-    {
-      id: "wl2",
-      name: "Terracotta Jewelry Set",
-      price: 1800,
-      image: "/placeholder.svg?height=100&width=100",
-    },
-  ],
-};
+import type { IOrder, IUser, IWishlist } from "@/types/user.types";
 
 export default function UserProfilePage() {
-  const [userProfile, setUserProfile] = useState<typeof mockUserProfile | null>(
-    null,
-  );
+  const { data: session } = useSession();
+  const [userProfile, setUserProfile] = useState<IUser | null>();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate API fetch
     const fetchUserProfile = async () => {
       try {
-        // In a real app, you would fetch from your API
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        setUserProfile(mockUserProfile);
+        if (!session?.user?.id) return;
+
+        const response = await getOneUserWithProfile({ id: session.user.id });
+        if (!response.data) return null;
+        setUserProfile(response.data);
+        setIsLoading(false);
+        console.log(response.data);
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
       } finally {
@@ -80,7 +39,7 @@ export default function UserProfilePage() {
     };
 
     fetchUserProfile();
-  }, []);
+  }, [session?.user?.id]);
 
   if (isLoading) {
     return (
@@ -95,41 +54,33 @@ export default function UserProfilePage() {
 
   if (!userProfile) {
     return (
-      <div className="text-center py-12">
-        <h2 className="text-xl font-semibold mb-2">Profile Not Found</h2>
-        <p className="text-muted-foreground mb-6">
-          We couldn&apos;t find your profile information.
-        </p>
-        <Button asChild>
-          <Link href="/user/onboard">Complete Your Profile</Link>
-        </Button>
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Still loading...</p>
+        </div>
       </div>
     );
   }
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    }).format(date);
-  };
-
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "DELIVERED":
+      case "AVAILABLE":
         return "bg-green-100 text-green-800";
       case "PROCESSING":
         return "bg-blue-100 text-blue-800";
-      case "SHIPPED":
+      case "DISCONTINUED":
         return "bg-purple-100 text-purple-800";
-      case "CANCELLED":
+      case "OUT_OF_STOCK":
         return "bg-red-100 text-red-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
   };
+  const joining_date = Dayjs(userProfile.profiles[0].createdAt).format(
+    "DD MMM YYYY",
+  );
+  const _userProfile = userProfile.profiles[0];
 
   return (
     <div>
@@ -142,79 +93,76 @@ export default function UserProfilePage() {
           </Link>
         </Button>
       </div>
-
       <Card className="mb-8">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
             <div className="relative w-32 h-32 rounded-full overflow-hidden">
               <Image
-                src={userProfile.image || "/placeholder.svg"}
-                alt={`${userProfile.firstName} ${userProfile.lastName}`}
+                src={_userProfile.image || "/placeholder.svg"}
+                alt={`${_userProfile.firstName} ${_userProfile.lastName}`}
                 fill
                 className="object-cover"
               />
             </div>
             <div className="flex-1 text-center md:text-left">
               <h2 className="text-2xl font-bold mb-2">
-                {userProfile.firstName} {userProfile.lastName}
+                {_userProfile.firstName} {_userProfile.lastName}
               </h2>
               <Badge variant="outline" className="mb-4">
-                {userProfile.role === "CUSTOMER" ? "Customer" : "Admin"}
+                Customer
               </Badge>
               <div className="space-y-2">
                 <div className="flex items-center justify-center md:justify-start text-muted-foreground">
                   <MapPin className="mr-2 h-4 w-4" />
-                  <span>{userProfile.address}</span>
+                  <span>{_userProfile.address}</span>
                 </div>
                 <div className="flex items-center justify-center md:justify-start text-muted-foreground">
                   <Phone className="mr-2 h-4 w-4" />
-                  <span>{userProfile.phoneNumber}</span>
+                  <span>{_userProfile.phoneNumber}</span>
                 </div>
                 <div className="flex items-center justify-center md:justify-start text-muted-foreground">
                   <Mail className="mr-2 h-4 w-4" />
-                  <span>user@example.com</span>
+                  <span>{userProfile.email}</span>
                 </div>
                 <div className="flex items-center justify-center md:justify-start text-muted-foreground">
                   <Calendar className="mr-2 h-4 w-4" />
-                  <span>Member since {formatDate(userProfile.createdAt)}</span>
+                  <span>Member since {joining_date}</span>
                 </div>
               </div>
             </div>
           </div>
         </CardContent>
       </Card>
-
       <Tabs defaultValue="orders">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="orders">Recent Orders</TabsTrigger>
           <TabsTrigger value="wishlist">Wishlist</TabsTrigger>
         </TabsList>
-
         <TabsContent value="orders" className="mt-6">
           <div className="space-y-4">
-            {userProfile.orders.map(order => (
+            {_userProfile.orders.map((order: IOrder) => (
               <Card key={order.id}>
                 <CardContent className="p-4">
                   <div className="flex flex-col sm:flex-row justify-between mb-4">
                     <div>
                       <div className="flex items-center">
-                        <h3 className="font-semibold">
-                          Order #{order.orderNumber}
-                        </h3>
+                        <h3 className="font-semibold">Order #{order.id}</h3>
                         <Badge
-                          className={`ml-2 ${getStatusColor(order.status)}`}
+                          className={`ml-2 ${getStatusColor(order.orderStatus)}`}
                         >
-                          {order.status}
+                          {order.orderStatus}
                         </Badge>
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        Placed on {formatDate(order.createdAt)}
+                        Placed on {Dayjs(order.createdAt).format("DD MMM YYYY")}
                       </p>
                     </div>
                     <div className="mt-2 sm:mt-0">
+                      {/* 
                       <p className="font-semibold">
                         ৳{order.total.toLocaleString()}
-                      </p>
+                      </p> 
+                      */}
                       <Button
                         variant="link"
                         size="sm"
@@ -229,6 +177,7 @@ export default function UserProfilePage() {
                   </div>
                   <Separator className="my-2" />
                   <div className="space-y-2">
+                    {/* 
                     {order.items.map((item, index) => (
                       <div key={index} className="flex justify-between text-sm">
                         <span>
@@ -236,7 +185,8 @@ export default function UserProfilePage() {
                         </span>
                         <span>৳{item.price.toLocaleString()}</span>
                       </div>
-                    ))}
+                    ))} 
+                    */}
                   </div>
                 </CardContent>
               </Card>
@@ -248,48 +198,43 @@ export default function UserProfilePage() {
             </div>
           </div>
         </TabsContent>
-
         <TabsContent value="wishlist" className="mt-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {userProfile.wishlists.map(item => (
-              <Card key={item.id}>
-                <CardContent className="p-4">
-                  <div className="flex gap-4">
-                    <div className="relative w-16 h-16 flex-shrink-0">
-                      <Image
-                        src={item.image || "/placeholder.svg"}
-                        alt={item.name}
-                        fill
-                        className="object-cover rounded-md"
-                      />
+          {_userProfile.wishlists.map((wishlist: IWishlist) => (
+            <Card key={wishlist.id}>
+              <CardContent className="p-4">
+                <div className="flex flex-col sm:flex-row justify-between mb-4">
+                  <div>
+                    <div className="flex items-center">
+                      <h3 className="font-semibold">
+                        Wishlist id #{wishlist.id}
+                      </h3>
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-medium">{item.name}</h3>
-                      <p className="text-sm font-semibold mt-1">
-                        ৳{item.price.toLocaleString()}
-                      </p>
-                      <div className="flex gap-2 mt-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="h-8 text-xs"
-                        >
-                          Add to Cart
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="h-8 text-xs text-destructive"
-                        >
-                          Remove
-                        </Button>
-                      </div>
-                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Number of items {wishlist.productId.length}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Placed on{" "}
+                      {Dayjs(wishlist.createdAt).format("DD MMM YYYY")}
+                    </p>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  <div className="mt-2 sm:mt-0">
+                    <Button
+                      variant="link"
+                      size="sm"
+                      className="p-0 h-auto"
+                      asChild
+                    >
+                      <Link href={`/user/wishlist/${wishlist.id}`}>
+                        View Details
+                      </Link>
+                    </Button>
+                  </div>
+                </div>
+                <Separator className="my-2" />
+                <div className="space-y-2"></div>
+              </CardContent>
+            </Card>
+          ))}
           <div className="text-center mt-4">
             <Button variant="outline" asChild>
               <Link href="/user/wishlist">View Full Wishlist</Link>
