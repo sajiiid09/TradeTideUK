@@ -121,4 +121,4 @@ MIT License
 ## Contributors
 
 - Tareq Mahmood (@[Eddie2111](https://github.com/Eddie2111/TradeTideUK))
-- Add yourself here if you contributed to the project!
+- Sajid Mahmud (@[sajiiid09])
